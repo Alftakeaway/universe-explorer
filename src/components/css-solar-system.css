@@ -212,15 +212,15 @@
 .scale-stretched #neptune.planet { font-size: 4.9em; }
 .scale-stretched #earth.moon { font-size: 1.5em; }
 
-/* ============== PLANET SIZES ============== */
-#mercury .planet { width: 0.4em; height: 0.4em; margin-top: -0.2em; margin-left: -0.2em; }
-#venus .planet { width: 0.9em; height: 0.9em; margin-top: -0.45em; margin-left: -0.45em; }
-#earth .planet { width: 1em; height: 1em; }
-#mars .planet { width: 0.53em; height: 0.53em; margin-top: -0.265em; margin-left: -0.265em; }
-#jupiter .planet { width: 2.2em; height: 2.2em; margin-top: -1.1em; margin-left: -1.1em; }
-#saturn .planet { width: 1.8em; height: 1.8em; margin-top: -0.9em; margin-left: -0.9em; }
-#uranus .planet { width: 1.2em; height: 1.2em; margin-top: -0.6em; margin-left: -0.6em; }
-#neptune .planet { width: 1.1em; height: 1.1em; margin-top: -0.55em; margin-left: -0.55em; }
+/* ============== PLANET SIZES (font-size only, base is 1em x 1em) ============== */
+#mercury .planet { font-size: 0.4em; }
+#venus .planet { font-size: 0.9em; }
+#earth .planet { font-size: 1em; }
+#mars .planet { font-size: 0.53em; }
+#jupiter .planet { font-size: 2.2em; }
+#saturn .planet { font-size: 1.8em; }
+#uranus .planet { font-size: 1.2em; }
+#neptune .planet { font-size: 1.1em; }
 
 /* ============== PLANETS INDEX ============== */
 #mercury { z-index: 20; }
