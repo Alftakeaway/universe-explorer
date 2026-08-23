@@ -338,6 +338,47 @@
 #uranus .planet { animation-name: shadow-uranus; }
 #neptune .planet { animation-name: shadow-neptune; }
 
+/* ============== 2D VIEW ============== */
+.view-2D.zoom-large #sun {
+  transform-style: flat;
+}
+
+.view-2D.zoom-large .orbit {
+  transform-style: flat;
+}
+
+.view-2D #sun,
+.view-2D .planet,
+.view-2D #earth .moon {
+  transform: rotateX(0deg);
+}
+
+/* ============== ZOOM + SCALE FONT-SIZE ============== */
+.zoom-large #solar-system {
+  width: 100%;
+}
+
+.zoom-large.view-2D .scale-stretched #solar-system { font-size: 26%; }
+.zoom-large.view-3D .scale-stretched #solar-system { font-size: 62%; }
+.zoom-large.view-2D .scale-d #solar-system { font-size: 22%; }
+.zoom-large.view-3D .scale-d #solar-system { font-size: 48%; }
+.zoom-large.view-2D .scale-s #solar-system { font-size: 7%; }
+.zoom-large.view-3D .scale-s #solar-system { font-size: 14%; }
+
+/* Close zoom */
+.zoom-close #solar-system {
+  width: 200%;
+  font-size: 100%;
+}
+
+.zoom-close .scale-stretched #solar-system { margin-left: -100%; }
+.zoom-close .scale-d #solar-system { margin-left: -106%; }
+.zoom-close.view-2D .scale-d #solar-system { font-size: 84%; }
+.zoom-close.view-3D .scale-d #solar-system { font-size: 84%; }
+.zoom-close .scale-s #solar-system { margin-left: -145%; }
+.zoom-close.view-2D .scale-s #solar-system { font-size: 40%; }
+.zoom-close.view-3D .scale-s #solar-system { font-size: 40%; }
+
 /* ============== RESPONSIVE ============== */
 @media (max-width: 768px) {
   .css-solar-system { font-size: 6px; }
