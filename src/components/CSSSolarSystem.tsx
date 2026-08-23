@@ -154,14 +154,17 @@ export default function CSSSolarSystem() {
     );
   };
 
+  const [scaleClass, setScaleClass] = useState("scale-stretched");
+
   const setDataMode = (mode: string) => {
-    setBodyClass((prev) =>
-      prev
-        .replace("set-speed", "")
-        .replace("set-size", "")
-        .replace("set-distance", "")
-        .trim() + ` ${mode}`
-    );
+      setBodyClass((prev) =>
+        prev
+          .replace("set-speed", "")
+          .replace("set-size", "")
+          .replace("set-distance", "")
+          .trim() + ` ${mode}`
+      );
+      setScaleClass(mode === "set-distance" ? "scale-d" : mode === "set-size" ? "scale-s" : "scale-stretched");
   };
 
   const toggleData = () => {
@@ -236,17 +239,21 @@ export default function CSSSolarSystem() {
         </label>
       </div>
 
-      <div id="universe" className="scale-stretched">
+      <div id="universe" className={scaleClass}>
         <div id="galaxy">
           <div id="solar-system" className={activePlanet}>
             <div id="mercury" className="orbit">
               <div className="pos">
-                <div className="planet" onClick={() => handlePlanetClick("mercury")}></div>
+                <div className="planet" onClick={() => handlePlanetClick("mercury")}>
+                  <dl className="infos"><dt>Mercury</dt><dd><span></span></dd></dl>
+                </div>
               </div>
             </div>
             <div id="venus" className="orbit">
               <div className="pos">
-                <div className="planet" onClick={() => handlePlanetClick("venus")}></div>
+                <div className="planet" onClick={() => handlePlanetClick("venus")}>
+                  <dl className="infos"><dt>Venus</dt><dd><span></span></dd></dl>
+                </div>
               </div>
             </div>
             <div id="earth" className="orbit">
@@ -256,37 +263,50 @@ export default function CSSSolarSystem() {
                     <div className="moon"></div>
                   </div>
                 </div>
-                <div className="planet" onClick={() => handlePlanetClick("earth")}></div>
+                <div className="planet" onClick={() => handlePlanetClick("earth")}>
+                  <dl className="infos"><dt>Earth</dt><dd><span></span></dd></dl>
+                </div>
               </div>
             </div>
             <div id="mars" className="orbit">
               <div className="pos">
-                <div className="planet" onClick={() => handlePlanetClick("mars")}></div>
+                <div className="planet" onClick={() => handlePlanetClick("mars")}>
+                  <dl className="infos"><dt>Mars</dt><dd><span></span></dd></dl>
+                </div>
               </div>
             </div>
             <div id="jupiter" className="orbit">
               <div className="pos">
-                <div className="planet" onClick={() => handlePlanetClick("jupiter")}></div>
+                <div className="planet" onClick={() => handlePlanetClick("jupiter")}>
+                  <dl className="infos"><dt>Jupiter</dt><dd><span></span></dd></dl>
+                </div>
               </div>
             </div>
             <div id="saturn" className="orbit">
               <div className="pos">
                 <div className="planet" onClick={() => handlePlanetClick("saturn")}>
                   <div className="ring"></div>
+                  <dl className="infos"><dt>Saturn</dt><dd><span></span></dd></dl>
                 </div>
               </div>
             </div>
             <div id="uranus" className="orbit">
               <div className="pos">
-                <div className="planet" onClick={() => handlePlanetClick("uranus")}></div>
+                <div className="planet" onClick={() => handlePlanetClick("uranus")}>
+                  <dl className="infos"><dt>Uranus</dt><dd><span></span></dd></dl>
+                </div>
               </div>
             </div>
             <div id="neptune" className="orbit">
               <div className="pos">
-                <div className="planet" onClick={() => handlePlanetClick("neptune")}></div>
+                <div className="planet" onClick={() => handlePlanetClick("neptune")}>
+                  <dl className="infos"><dt>Neptune</dt><dd><span></span></dd></dl>
+                </div>
               </div>
             </div>
-            <div id="sun" onClick={() => handlePlanetClick("sun")}></div>
+            <div id="sun" onClick={() => handlePlanetClick("sun")}>
+              <dl className="infos"><dt>Sun</dt><dd><span></span></dd></dl>
+            </div>
           </div>
         </div>
       </div>
