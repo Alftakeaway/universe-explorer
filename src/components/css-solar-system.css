@@ -201,6 +201,17 @@
 #uranus .pos, #uranus .planet, #uranus.orbit { animation-duration: 1008.20215s; }
 #neptune .pos, #neptune .planet, #neptune.orbit { animation-duration: 1977.49584s; }
 
+/* ============== SCALE-STRETCHED PLANET SIZES ============== */
+.scale-stretched #mercury.planet { font-size: 1.5em; }
+.scale-stretched #venus.planet { font-size: 3.72em; }
+.scale-stretched #earth.planet { font-size: 3.92em; }
+.scale-stretched #mars.planet { font-size: 2.9em; }
+.scale-stretched #jupiter.planet { font-size: 12em; }
+.scale-stretched #saturn.planet { font-size: 10.8em; }
+.scale-stretched #uranus.planet { font-size: 4.68em; }
+.scale-stretched #neptune.planet { font-size: 4.9em; }
+.scale-stretched #earth.moon { font-size: 1.5em; }
+
 /* ============== PLANET SIZES ============== */
 #mercury .planet { width: 0.4em; height: 0.4em; margin-top: -0.2em; margin-left: -0.2em; }
 #venus .planet { width: 0.9em; height: 0.9em; margin-top: -0.45em; margin-left: -0.45em; }
