@@ -1,69 +1,164 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useCallback, useMemo } from "react";
+import SolarSystem from "@/components/SolarSystem";
+import PlanetInfo from "@/components/PlanetInfo";
+import ExoplanetInfo from "@/components/ExoplanetInfo";
+import DeepSpaceInfo from "@/components/DeepSpaceInfo";
+import HUDControls from "@/components/HUDControls";
+import AccessibilityControls from "@/components/AccessibilityControls";
+import AmbientAudio from "@/components/AmbientAudio";
+import { PlanetData, planets } from "@/data/planets";
+import { ExoplanetData } from "@/data/exoplanets";
+import { DeepSpaceObject } from "@/data/deepSpace";
+import { ZoomLevel } from "@/components/ZoomLevelManager";
+
+interface AccessibilitySettings {
+  reduceMotion: boolean;
+  highContrast: boolean;
+  keyboardNav: boolean;
+}
 
 export default function Home() {
+  const [selectedPlanet, setSelectedPlanet] = useState<PlanetData | null>(null);
+  const [hoveredPlanet, setHoveredPlanet] = useState<PlanetData | null>(null);
+  const [selectedExoplanet, setSelectedExoplanet] = useState<ExoplanetData | null>(null);
+  const [selectedDeepSpace, setSelectedDeepSpace] = useState<DeepSpaceObject | null>(null);
+
+  const [timeScale, setTimeScale] = useState(1);
+  const [showRings, setShowRings] = useState(true);
+  const [showAtmosphere, setShowAtmosphere] = useState(true);
+  const [showAsteroids, setShowAsteroids] = useState(true);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState<ZoomLevel>("solar");
+
+  const [accessibility, setAccessibility] = useState<AccessibilitySettings>({
+    reduceMotion: false,
+    highContrast: false,
+    keyboardNav: false,
+  });
+
+  const handleNavigate = useCallback(
+    (direction: "prev" | "next") => {
+      if (zoomLevel !== "solar") return;
+
+      const allPlanets = planets;
+      if (direction === "next") {
+        if (selectedPlanet) {
+          const idx = allPlanets.findIndex((p) => p.name === selectedPlanet.name);
+          if (idx < allPlanets.length - 1) {
+            setSelectedPlanet(allPlanets[idx + 1]);
+          } else {
+            setSelectedPlanet(null);
+          }
+        } else {
+          setSelectedPlanet(allPlanets[0]);
+        }
+      } else {
+        if (selectedPlanet) {
+          const idx = allPlanets.findIndex((p) => p.name === selectedPlanet.name);
+          if (idx > 0) {
+            setSelectedPlanet(allPlanets[idx - 1]);
+          } else {
+            setSelectedPlanet(null);
+          }
+        } else {
+          setSelectedPlanet(allPlanets[allPlanets.length - 1]);
+        }
+      }
+    },
+    [selectedPlanet, zoomLevel]
+  );
+
+  const anySelected = selectedPlanet || selectedExoplanet || selectedDeepSpace;
+
+  const bottomHint = useMemo(() => {
+    if (selectedPlanet) return `${selectedPlanet.name} — clicca altrove per deselezionare`;
+    if (selectedExoplanet) return `${selectedExoplanet.name} — clicca altrove per deselezionare`;
+    if (selectedDeepSpace) return `${selectedDeepSpace.name} — clicca altrove per deselezionare`;
+    if (hoveredPlanet) return `${hoveredPlanet.name} — clicca per esplorare`;
+    return "passa il mouse su un oggetto per iniziare • usa la rotellilla per navigare tra i livelli";
+  }, [selectedPlanet, selectedExoplanet, selectedDeepSpace, hoveredPlanet]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="relative h-screen w-screen overflow-hidden bg-black">
+      <SolarSystem
+        selectedPlanet={selectedPlanet}
+        onSelectPlanet={setSelectedPlanet}
+        onHoverPlanet={setHoveredPlanet}
+        selectedExoplanet={selectedExoplanet}
+        onSelectExoplanet={setSelectedExoplanet}
+        selectedDeepSpace={selectedDeepSpace}
+        onSelectDeepSpace={setSelectedDeepSpace}
+        timeScale={timeScale}
+        showRings={showRings}
+        showAtmosphere={showAtmosphere}
+        showAsteroids={showAsteroids}
+        zoomLevel={zoomLevel}
+        onZoomLevelChange={setZoomLevel}
+        reduceMotion={accessibility.reduceMotion}
+      />
+
+      <HUDControls
+        timeScale={timeScale}
+        onTimeScaleChange={setTimeScale}
+        showRings={showRings}
+        onToggleRings={() => setShowRings(!showRings)}
+        showAtmosphere={showAtmosphere}
+        onToggleAtmosphere={() => setShowAtmosphere(!showAtmosphere)}
+        showAsteroids={showAsteroids}
+        onToggleAsteroids={() => setShowAsteroids(!showAsteroids)}
+        zoomLevel={zoomLevel}
+        onZoomLevelChange={setZoomLevel}
+      />
+
+      <PlanetInfo
+        planet={selectedPlanet}
+        onClose={() => setSelectedPlanet(null)}
+      />
+
+      <ExoplanetInfo
+        planet={selectedExoplanet}
+        onClose={() => setSelectedExoplanet(null)}
+      />
+
+      <DeepSpaceInfo
+        object={selectedDeepSpace}
+        onClose={() => setSelectedDeepSpace(null)}
+      />
+
+      <AccessibilityControls
+        settings={accessibility}
+        onSettingsChange={setAccessibility}
+        onNavigate={handleNavigate}
+      />
+
+      <AmbientAudio enabled={audioEnabled} />
+
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
+        <div className="bg-black/60 backdrop-blur-md border border-cyan-500/10 rounded-full px-5 py-2 flex items-center gap-4">
+          <p className="text-gray-500 text-[10px] tracking-wider">{bottomHint}</p>
+        </div>
+      </div>
+
+      <div className="fixed top-4 right-4 z-40">
+        <div className="bg-black/60 backdrop-blur-md border border-cyan-500/10 rounded-lg px-3 py-2">
+          <h1 className="text-cyan-400 text-[10px] font-bold tracking-[0.3em] uppercase">
+            Universe Explorer
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </div>
+
+      <div className="fixed bottom-4 right-4 z-40">
+        <div className="bg-black/60 backdrop-blur-md border border-cyan-500/10 rounded-lg px-3 py-2 flex items-center gap-2">
+          <span className="text-gray-600 text-[9px] uppercase tracking-wider">
+            {zoomLevel === "solar" && "Sistema Solare"}
+            {zoomLevel === "exoplanet" && "Esopianeti"}
+            {zoomLevel === "galactic" && "Strutture Galattiche"}
+            {zoomLevel === "cosmic" && "Scala Cosmica"}
+          </span>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
